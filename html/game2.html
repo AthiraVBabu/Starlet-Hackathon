@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ball Bounce</title>
+  <style>
+    /* CSS styles for the ball */
+    .ball {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.5s ease-out;
+    }
+    
+    /* CSS styles for the score element */
+    #score {
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scoreEffect 0.3s infinite alternate;
+    }
+
+    /* Keyframe animation for score effect */
+    @keyframes scoreEffect {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.2);
+      }
+    }
+
+    /* CSS styles for the win popup */
+    #winPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff;
+      padding: 20px;
+      border: 2px solid #000000;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameBoard"></div>
+  <div id="score">Score: 0</div>
+  <div id="winPopup">You win!</div>
+
+  <script>
+    // Get the game board element
+    const gameBoard = document.getElementById('gameBoard');
+    const scoreElement = document.getElementById('score');
+    const winPopup = document.getElementById('winPopup');
+    let score = 0;
+    let remainingBalls = 10;
+
+    // Function to generate a random color
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    // Function to generate a ball with random color
+    function createBall() {
+      const ball = document.createElement('div');
+      ball.className = 'ball';
+      ball.style.backgroundColor = getRandomColor();
+      gameBoard.appendChild(ball);
+
+      // Set initial position and velocity
+      const startX = Math.random() * (window.innerWidth - 50);
+      const startY = Math.random() * (window.innerHeight - 50);
+      let x = startX;
+      let y = startY;
+      let dx = 1;  // Adjust the speed by modifying the dx value
+      let dy = 1;  // Adjust the speed by modifying the dy value
+
+      // Function to update the position of the ball
+      function updatePosition() {
+        ball.style.transform = `translate(${x}px, ${y}px)`;
+
+        // Check for collision with window boundaries
+        if (x + dx > window.innerWidth - 50 || x + dx < 0) {
+          dx = -dx;
+        }
+        if (y + dy > window.innerHeight - 50 || y + dy < 0) {
+          dy = -dy;
+        }
+
+        // Update position
+        x += dx;
+        y += dy;
+
+        // Schedule the next update
+        requestAnimationFrame(updatePosition);
+      }
+
+      // Function to remove the ball from the game board
+      function removeBall() {
+        ball.remove();
+        remainingBalls--;
+        if (remainingBalls === 0) {
+          showWinPopup();
+        }
+      }
+
+      // Function to handle ball click event
+      function handleBallClick() {
+        removeBall();
+        score++;
+        scoreElement.textContent = 'Score: ' + score;
+
+        // Pop effect animation
+        scoreElement.classList.add('pop');
+
+        // Reset pop effect after 500ms
+        setTimeout(() => {
+          scoreElement.classList.remove('pop');
+        }, 500);
+      }
+
+      // Add click event listener to the ball
+      ball.addEventListener('click', handleBallClick);
+
+      // Start updating the position
+      updatePosition();
+    }
+
+    function showWinPopup() {
+      winPopup.style.display = 'block';
+    }
+
+    for (let i = 0; i < 10; i++) {
+      createBall();
+    }
+  </script>
+</body>
+</html>
