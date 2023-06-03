@@ -1,4 +1,7 @@
 # Starlet-Hackathon
+
+Access the site [here](https://athiravbabu.github.io/Starlet-Hackathon/index.html)
+
 Revive : 
 The Revive aims to provide individuals with a platform to support their mental well-being 
 and promote positive mental health practices. Through a user-friendly interface, the website
