@@ -1,2 +1,2 @@
 # Starlet-Hackathon
-Campus Thrift
+Revive
